@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
     // TODO : Body for UpdateUI method
@@ -68,9 +69,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     // signs up a new user using email ID and password
     private void signUp() {
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-        String confirmPassword = confirmPasswordText.getText().toString();
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
+        final String confirmPassword = confirmPasswordText.getText().toString();
+        final String name = nameText.getText().toString();
 
         if(email.contains("@") && email.contains(".com")) {
             if(password.equals(confirmPassword)) {
@@ -81,6 +83,19 @@ public class SignUpActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
+                                        if(user != null) {
+                                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                    .setDisplayName(name)
+                                                    .build();
+
+                                            user.updateProfile(profileUpdates)
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            Toast.makeText(SignUpActivity.this, "Profile Created", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
                                         updateUI(user);
                                     }else {
                                         Toast.makeText(SignUpActivity.this, "Could" +
