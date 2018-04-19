@@ -3,7 +3,7 @@ package com.se_project.moviedb;
 import java.util.ArrayList;
 
 public class Movie {
-    private String title;   // Title of the Movie
+    private String title;   // title of the Movie
     private String releaseDate;
     private ArrayList<String> genres;
     private String rating;
